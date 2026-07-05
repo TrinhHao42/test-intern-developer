@@ -36,8 +36,6 @@ public class AuthService {
 
     @Transactional
     public AuthResponseDTO register(RegisterRequestDTO request) {
-        validateRegisterRequest(request);
-
         String username = request.getUsername().trim();
         String name = request.getName().trim();
 
@@ -61,8 +59,6 @@ public class AuthService {
     }
 
     public AuthResponseDTO login(LoginRequestDTO request, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-        validateLoginRequest(request);
-
         Authentication authentication;
         try {
             authentication = authenticationManager.authenticate(
@@ -87,22 +83,5 @@ public class AuthService {
         return accountReponsitory.findAccountByUsername(request.getUsername().trim())
                 .map(AuthResponseDTO::from)
                 .orElseThrow(() -> new AppException(ErrorCode.INVALID_CREDENTIALS, "Đăng nhập thất bại"));
-    }
-
-    private void validateRegisterRequest(RegisterRequestDTO request) {
-        if (request == null
-                || !StringUtils.hasText(request.getUsername())
-                || !StringUtils.hasText(request.getPassword())
-                || !StringUtils.hasText(request.getName())) {
-            throw new AppException(ErrorCode.INVALID_REQUEST, "Vui lòng nhập đầy đủ username, password và name");
-        }
-    }
-
-    private void validateLoginRequest(LoginRequestDTO request) {
-        if (request == null
-                || !StringUtils.hasText(request.getUsername())
-                || !StringUtils.hasText(request.getPassword())) {
-            throw new AppException(ErrorCode.INVALID_REQUEST, "Vui lòng nhập username và password");
-        }
     }
 }

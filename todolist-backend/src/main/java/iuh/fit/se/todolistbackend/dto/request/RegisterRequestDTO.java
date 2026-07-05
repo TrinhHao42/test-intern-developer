@@ -14,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 public class RegisterRequestDTO {
 
+    @NotBlank(message = "Tên đăng nhập không được để trống.")
     String username;
 
     @NotBlank(message = "Mật khẩu không được để trống.")
@@ -26,6 +27,7 @@ public class RegisterRequestDTO {
             message = "Mật khẩu phải có ít nhất 1 kí tự in hoa, 1 kí tự in thường, 1 kí tự số và 1 kí tự đặc biệt."
     )
     String password;
+
+    @NotBlank(message = "Tên hiển thị không được để trống.")
     String name;
 }
-
