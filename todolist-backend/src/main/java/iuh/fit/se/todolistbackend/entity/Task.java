@@ -12,16 +12,16 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "todos")
+@Table(name = "tasks")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
-public class Todo {
+public class Task {
     @Id
-    @Column(name = "todo_id")
+    @Column(name = "task_id")
     @GeneratedValue
     @UuidGenerator
     UUID id;
