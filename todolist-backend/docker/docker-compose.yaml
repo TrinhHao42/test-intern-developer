@@ -1,0 +1,17 @@
+name: todolist-backend
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres-db
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: todolistDB
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: sapassword
+      TZ: Asia/Ho_Chi_Minh
+      PGTZ: Asia/Ho_Chi_Minh
+
+    ports:
+      - "5432:5432"
