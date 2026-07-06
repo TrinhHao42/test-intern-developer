@@ -1,78 +1,44 @@
-# Hướng Dẫn Khởi Chạy Ứng Dụng Todo List (Local Setup)
+# Hướng Dẫn Chạy Dự Án Todo List (Local Setup)
 
-Tài liệu này hướng dẫn cách cài đặt và chạy thử dự án Todo List (bao gồm Spring Boot Backend và React Frontend) trên máy tính cá nhân (local).
-
----
-
-## 🛠 Yêu Cầu Hệ Thống (Prerequisites)
-Trước khi bắt đầu, hãy đảm bảo máy tính của bạn đã cài đặt các công cụ sau:
-* **Java Development Kit (JDK)**: Phiên bản 17 trở lên.
-* **Node.js**: Phiên bản 18 trở lên (kèm theo `npm`).
-* **Docker & Docker Compose**: (Tùy chọn) Để khởi tạo nhanh cơ sở dữ liệu PostgreSQL. Nếu không dùng Docker, bạn cần tự cài đặt PostgreSQL trên máy.
+Dự án gồm hai phần: **Spring Boot Backend** và **React Frontend**. Dưới đây là hướng dẫn cài đặt và khởi chạy nhanh chóng trên máy local.
 
 ---
 
-## 💾 Bước 1: Khởi Tạo Cơ Sở Dữ Liệu (PostgreSQL)
+## ☕ 1. Khởi chạy Backend (Sử dụng IntelliJ IDEA)
 
-### Cách A: Sử dụng Docker Compose (Khuyên dùng)
-Nếu máy bạn có cài đặt Docker, bạn chỉ cần mở terminal tại thư mục gốc của dự án và chạy các lệnh sau:
-```bash
-cd todolist-backend/docker
-docker compose up -d
-```
-*Lệnh này sẽ khởi tạo một container chứa PostgreSQL 17 chạy ở cổng `5432` với cấu hình cơ sở dữ liệu tên là `todolistDB`, tài khoản đăng nhập là `user` và mật khẩu là `sapassword`.*
+### Yêu cầu
+* **JDK**: Phiên bản 21 trở lên.
+* **Database**: Dự án đang kết nối trực tiếp đến PostgreSQL database online (Render). Bạn không cần cài đặt database local khi chạy thử.
 
-### Cách B: Cài đặt trực tiếp trên hệ điều hành
-Nếu cài đặt thủ công PostgreSQL trên máy, hãy tạo một database mới bằng công cụ quản trị (như pgAdmin) với thông số:
-* **Database Name**: `todolistDB`
-* **Port**: `5432`
-* **Username**: `user`
-* **Password**: `sapassword`
-*(Nếu bạn sử dụng tài khoản khác, hãy chỉnh sửa lại thông tin tương ứng trong file `todolist-backend/src/main/resources/application.yaml`).*
+### Các bước chạy trên IntelliJ IDEA:
+1. Mở IntelliJ IDEA, chọn **Open** và dẫn tới thư mục `todolist-backend`.
+2. Đợi IntelliJ tự động nhận diện và tải các dependency từ file `pom.xml` (Maven).
+3. Mở file [TodolistBackendApplication.java](file:///e:/Project/test-intern-developer/todolist-backend/src/main/java/iuh/fit/se/todolistbackend/TodolistBackendApplication.java) (trong thư mục `src/main/java/iuh/fit/se/todolistbackend/`).
+4. Click chuột phải vào file hoặc click vào biểu tượng nút **Run (Play màu xanh)** ở góc trên để khởi chạy dự án.
+5. Backend sẽ chạy ở cổng `8080`.
+   - Xem tài liệu API (Swagger UI): [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
 
 ---
 
-## ☕ Bước 2: Chạy Spring Boot Backend
+## ⚛ 2. Khởi chạy Frontend (Chạy bình thường)
 
-1. Di chuyển vào thư mục backend:
-   ```bash
-   cd todolist-backend
-   ```
-2. Chạy ứng dụng bằng Maven Wrapper:
-   - **Trên Windows (cmd/powershell)**:
-     ```powershell
-     .\mvnw.cmd spring-boot:run
-     ```
-   - **Trên macOS / Linux**:
-     ```bash
-     chmod +x mvnw
-     ./mvnw spring-boot:run
-     ```
-3. Ứng dụng Backend sẽ khởi chạy tại: `http://localhost:8080`
-   - Bạn có thể xem tài liệu API (Swagger UI) tại: `http://localhost:8080/swagger-ui/index.html`
+### Yêu cầu
+* **Node.js**: Phiên bản 18 trở lên.
 
----
-
-## ⚛ Bước 3: Chạy React Frontend
-
-1. Mở một cửa sổ terminal mới và di chuyển vào thư mục frontend:
-   ```bash
-   cd todolist-frontend
-   ```
-2. Cài đặt các thư viện phụ thuộc (dependencies):
+### Các bước khởi chạy:
+1. Mở Terminal tại thư mục `todolist-frontend`.
+2. Cài đặt các thư viện phụ thuộc:
    ```bash
    npm install
    ```
-3. Khởi chạy dev server của React:
+3. Khởi chạy dự án ở chế độ phát triển (development):
    ```bash
    npm run dev
    ```
-4. Giao diện Frontend sẽ khởi chạy tại: `http://localhost:5173`
-   - Hãy truy cập liên kết trên bằng trình duyệt để sử dụng ứng dụng.
+4. Truy cập giao diện tại: [http://localhost:5173](http://localhost:5173)
 
 ---
 
-## 💡 Lưu Ý Quan Trọng Về Đồng Bộ & Tích Hợp
-* **Bảo mật và CORS**: Backend được cấu hình cho phép các yêu cầu gửi kèm credentials (Session Cookie) từ domain local.
-* **Cấu hình Proxy**: Dev server của Vite (cấu hình ở `vite.config.js`) tự động chuyển hướng (proxy) các request `/auth` và `/Todolist` đến `http://localhost:8080` để phòng tránh lỗi CORS và đồng bộ session cookie tự động. Bạn không cần đổi URL thủ công khi chạy local.
-* **Validate dữ liệu**: Cả hai phía Frontend và Backend đều được đồng bộ chặt chẽ về các ràng buộc dữ liệu đầu vào (Ví dụ: kiểm tra tính bắt buộc của tiêu đề công việc, độ dài mật khẩu đăng ký từ 8 ký tự kèm ký tự đặc biệt, tên hiển thị, v.v.).
+## 💡 Cấu hình hệ thống & Timezone
+* **Timezone**: Hệ thống đã được cấu hình mặc định múi giờ **`Asia/Ho_Chi_Minh`** trực tiếp tại class khởi chạy của Backend và định dạng JSON của Jackson.
+* **Cấu hình tích hợp**: Dự án sử dụng Vite proxy, các request từ frontend đến `/auth/*` và `/Todolist/*` sẽ tự động chuyển tiếp về Backend ở `localhost:8080` cùng với thông tin Session Cookie.
