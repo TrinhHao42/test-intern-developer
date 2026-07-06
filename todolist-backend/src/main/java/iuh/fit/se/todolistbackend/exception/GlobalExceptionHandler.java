@@ -30,10 +30,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleUnknown(Exception ex) {
+        ex.printStackTrace(); // Print to console/logs on Render
+        String message = ex.getClass().getName() + ": " + ex.getMessage();
+        if (ex.getCause() != null) {
+            message += " | Cause: " + ex.getCause().getClass().getName() + ": " + ex.getCause().getMessage();
+        }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponse.<Void>builder()
                         .code(ErrorCode.INTERNAL_ERROR.getCode())
-                        .message(ErrorCode.INTERNAL_ERROR.getMessage())
+                        .message(message)
                         .build());
     }
 }
