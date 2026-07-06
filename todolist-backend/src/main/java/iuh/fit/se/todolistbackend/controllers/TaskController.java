@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/Todolist")
+@RequestMapping({"/Todolist", "/Todolist/"})
 @RequiredArgsConstructor
 public class TaskController {
 
