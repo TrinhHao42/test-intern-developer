@@ -14,7 +14,7 @@ export default function App() {
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
   const { items: tasks, loading, error, filters } = useSelector(state => state.tasks);
-  const { search, completedFilter, dueDateFilter } = filters;
+  const { search, completedFilter, dueDateFilter, priorityFilter } = filters;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
@@ -25,7 +25,7 @@ export default function App() {
     if (user) {
       dispatch(fetchTasks());
     }
-  }, [user, search, completedFilter, dueDateFilter, dispatch]);
+  }, [user, search, completedFilter, dueDateFilter, priorityFilter, dispatch]);
 
   const openCreateModal = () => {
     setEditingTask(null);

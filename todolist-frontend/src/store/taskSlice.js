@@ -17,6 +17,9 @@ export const fetchTasks = createAsyncThunk(
       if (filters.completedFilter === 'completed') apiFilters.completed = true;
       if (filters.dueDateFilter) apiFilters.dueDate = filters.dueDateFilter;
       if (filters.search.trim()) apiFilters.search = filters.search.trim();
+      if (filters.priorityFilter && filters.priorityFilter !== 'all') {
+        apiFilters.priority = filters.priorityFilter;
+      }
 
       const response = await getTasksApi(apiFilters);
       return response.result || [];
@@ -95,7 +98,8 @@ const initialState = {
   filters: {
     search: '',
     completedFilter: 'all',
-    dueDateFilter: ''
+    dueDateFilter: '',
+    priorityFilter: 'all'
   },
   toast: null
 };
@@ -112,6 +116,9 @@ const taskSlice = createSlice({
     },
     setDueDateFilter(state, action) {
       state.filters.dueDateFilter = action.payload;
+    },
+    setPriorityFilter(state, action) {
+      state.filters.priorityFilter = action.payload;
     },
     showToast(state, action) {
       state.toast = {
@@ -131,7 +138,8 @@ const taskSlice = createSlice({
       state.filters = {
         search: '',
         completedFilter: 'all',
-        dueDateFilter: ''
+        dueDateFilter: '',
+        priorityFilter: 'all'
       };
     }
   },
@@ -192,6 +200,7 @@ export const {
   setSearch,
   setCompletedFilter,
   setDueDateFilter,
+  setPriorityFilter,
   showToast,
   clearToast,
   clearTasksError,

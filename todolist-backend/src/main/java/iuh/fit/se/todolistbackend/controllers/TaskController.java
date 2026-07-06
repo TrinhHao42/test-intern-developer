@@ -3,6 +3,7 @@ package iuh.fit.se.todolistbackend.controllers;
 import iuh.fit.se.todolistbackend.dto.common.ApiResponse;
 import iuh.fit.se.todolistbackend.dto.request.TaskRequestDTO;
 import iuh.fit.se.todolistbackend.dto.response.TaskResponseDTO;
+import iuh.fit.se.todolistbackend.entity.enums.Priority;
 import iuh.fit.se.todolistbackend.services.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +26,9 @@ public class TaskController {
     public ResponseEntity<ApiResponse<List<TaskResponseDTO>>> getTasks(
             @RequestParam(value = "completed", required = false) Boolean completed,
             @RequestParam(value = "dueDate", required = false) LocalDate dueDate,
-            @RequestParam(value = "search", required = false) String search) {
-        List<TaskResponseDTO> tasks = taskService.getTasks(completed, dueDate, search);
+            @RequestParam(value = "search", required = false) String search,
+            @RequestParam(value = "priority", required = false) Priority priority) {
+        List<TaskResponseDTO> tasks = taskService.getTasks(completed, dueDate, search, priority);
         ApiResponse<List<TaskResponseDTO>> response = ApiResponse.<List<TaskResponseDTO>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Get tasks successfully")

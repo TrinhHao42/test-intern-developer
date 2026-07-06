@@ -1,12 +1,12 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Filter, Search, Calendar } from 'lucide-react';
-import { setSearch, setCompletedFilter, setDueDateFilter } from '../../store/taskSlice';
+import { setSearch, setCompletedFilter, setDueDateFilter, setPriorityFilter } from '../../store/taskSlice';
 
 export default function Sidebar() {
   const dispatch = useDispatch();
   const { items: tasks, filters } = useSelector(state => state.tasks);
-  const { search, completedFilter, dueDateFilter } = filters;
+  const { search, completedFilter, dueDateFilter, priorityFilter } = filters;
 
   const [localSearch, setLocalSearch] = React.useState(search);
   const debounceTimeoutRef = React.useRef(null);
@@ -76,6 +76,31 @@ export default function Sidebar() {
                 onClick={() => dispatch(setCompletedFilter(item.id))}
                 className={`text-left px-3 py-2 rounded-lg text-sm font-medium transition-all ${
                   completedFilter === item.id 
+                    ? 'bg-indigo-50 text-indigo-700' 
+                    : 'text-slate-600 hover:bg-slate-50'
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Priority Filter */}
+        <div className="space-y-1.5">
+          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Độ ưu tiên</label>
+          <div className="flex flex-col gap-1">
+            {[
+              { id: 'all', label: 'Tất cả' },
+              { id: 'LOW', label: 'Thấp (Low)' },
+              { id: 'MEDIUM', label: 'Trung bình (Medium)' },
+              { id: 'HIGH', label: 'Cao (High)' }
+            ].map(item => (
+              <button
+                key={item.id}
+                onClick={() => dispatch(setPriorityFilter(item.id))}
+                className={`text-left px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                  priorityFilter === item.id 
                     ? 'bg-indigo-50 text-indigo-700' 
                     : 'text-slate-600 hover:bg-slate-50'
                 }`}

@@ -30,6 +30,9 @@ export const getTasksApi = async (filters = {}) => {
   if (filters.search) {
     params.search = filters.search;
   }
+  if (filters.priority) {
+    params.priority = filters.priority;
+  }
 
   const response = await api.get('/Todolist', { params });
   return response.data;

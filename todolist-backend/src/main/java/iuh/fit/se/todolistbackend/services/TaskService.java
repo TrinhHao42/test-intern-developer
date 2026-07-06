@@ -4,6 +4,7 @@ import iuh.fit.se.todolistbackend.dto.request.TaskRequestDTO;
 import iuh.fit.se.todolistbackend.dto.response.TaskResponseDTO;
 import iuh.fit.se.todolistbackend.entity.Task;
 import iuh.fit.se.todolistbackend.entity.User;
+import iuh.fit.se.todolistbackend.entity.enums.Priority;
 import iuh.fit.se.todolistbackend.exception.AppException;
 import iuh.fit.se.todolistbackend.exception.ErrorCode;
 import iuh.fit.se.todolistbackend.repository.TaskRepository;
@@ -39,7 +40,7 @@ public class TaskService {
     private jakarta.persistence.EntityManager entityManager;
 
     @Transactional(readOnly = true)
-    public List<TaskResponseDTO> getTasks(Boolean completed, java.time.LocalDate dueDate, String search) {
+    public List<TaskResponseDTO> getTasks(Boolean completed, java.time.LocalDate dueDate, String search, Priority priority) {
         UUID userId = getCurrentUserId();
         
         StringBuilder jpql = new StringBuilder("SELECT t FROM Task t WHERE t.user.id = :userId AND t.deletedAt IS NULL");
@@ -49,6 +50,9 @@ public class TaskService {
         }
         if (dueDate != null) {
             jpql.append(" AND t.dueDate = :dueDate");
+        }
+        if (priority != null) {
+            jpql.append(" AND t.priority = :priority");
         }
         if (search != null && !search.trim().isEmpty()) {
             jpql.append(" AND (LOWER(t.title) LIKE LOWER(:search) OR LOWER(t.description) LIKE LOWER(:search))");
@@ -62,6 +66,9 @@ public class TaskService {
         }
         if (dueDate != null) {
             query.setParameter("dueDate", dueDate);
+        }
+        if (priority != null) {
+            query.setParameter("priority", priority);
         }
         if (search != null && !search.trim().isEmpty()) {
             query.setParameter("search", "%" + search.trim() + "%");
