@@ -1,13 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { 
-  getTasksApi, 
-  createTaskApi, 
-  updateTaskApi, 
-  deleteTaskApi 
+import {
+  getTasksApi,
+  createTaskApi,
+  updateTaskApi,
+  deleteTaskApi
 } from '../api';
 import { setSessionExpired } from './authSlice';
 
-// Async Thunks
 export const fetchTasks = createAsyncThunk(
   'tasks/fetchTasks',
   async (_, { getState, rejectWithValue, dispatch }) => {
@@ -170,9 +169,9 @@ const taskSlice = createSlice({
         if (index !== -1) {
           state.items[index] = action.payload.updatedTask;
         }
-        state.toast = { 
-          message: action.payload.completed ? 'Đã hoàn thành công việc!' : 'Đã đánh dấu chưa hoàn thành', 
-          type: 'success' 
+        state.toast = {
+          message: action.payload.completed ? 'Đã hoàn thành công việc!' : 'Đã đánh dấu chưa hoàn thành',
+          type: 'success'
         };
       })
       .addCase(toggleTaskComplete.rejected, (state, action) => {
@@ -189,14 +188,14 @@ const taskSlice = createSlice({
   }
 });
 
-export const { 
-  setSearch, 
-  setCompletedFilter, 
-  setDueDateFilter, 
-  showToast, 
-  clearToast, 
+export const {
+  setSearch,
+  setCompletedFilter,
+  setDueDateFilter,
+  showToast,
+  clearToast,
   clearTasksError,
-  clearTasks 
+  clearTasks
 } = taskSlice.actions;
 
 export default taskSlice.reducer;

@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/auth/:path*",
+      "destination": "https://todo-backend-render.onrender.com/auth/:path*"
+    },
+    {
+      "source": "/Todolist/:path*",
+      "destination": "https://todo-backend-render.onrender.com/Todolist/:path*"
+    }
+  ]
+}

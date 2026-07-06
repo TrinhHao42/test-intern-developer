@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { loginApi, registerApi } from '../api';
 
-// Async Thunks
 export const login = createAsyncThunk(
   'auth/login',
   async ({ username, password }, { rejectWithValue }) => {
@@ -30,7 +29,6 @@ export const register = createAsyncThunk(
   }
 );
 
-// Initial State
 const savedUser = localStorage.getItem('todo_user');
 const initialState = {
   user: savedUser ? JSON.parse(savedUser) : null,
@@ -62,7 +60,6 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Login
       .addCase(login.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -76,7 +73,6 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      // Register
       .addCase(register.pending, (state) => {
         state.loading = true;
         state.error = null;
