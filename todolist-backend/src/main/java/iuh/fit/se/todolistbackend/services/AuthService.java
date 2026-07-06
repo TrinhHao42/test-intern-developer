@@ -5,10 +5,10 @@ import iuh.fit.se.todolistbackend.dto.request.RegisterRequestDTO;
 import iuh.fit.se.todolistbackend.dto.response.AuthResponseDTO;
 import iuh.fit.se.todolistbackend.entity.Account;
 import iuh.fit.se.todolistbackend.entity.User;
-import iuh.fit.se.todolistbackend.repository.AccountReponsitory;
-import iuh.fit.se.todolistbackend.repository.UserRepository;
 import iuh.fit.se.todolistbackend.exception.AppException;
 import iuh.fit.se.todolistbackend.exception.ErrorCode;
+import iuh.fit.se.todolistbackend.repository.AccountRepository;
+import iuh.fit.se.todolistbackend.repository.UserRepository;
 import iuh.fit.se.todolistbackend.security.CustomUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,13 +22,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final AccountReponsitory accountReponsitory;
+    private final AccountRepository accountRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -39,7 +38,7 @@ public class AuthService {
         String username = request.getUsername().trim();
         String name = request.getName().trim();
 
-        if (accountReponsitory.findAccountByUsername(username).isPresent()) {
+        if (accountRepository.findAccountByUsername(username).isPresent()) {
             throw new AppException(ErrorCode.USER_ALREADY_EXISTS, "Tên đăng nhập đã tồn tại");
         }
 
@@ -54,16 +53,16 @@ public class AuthService {
                 .user(savedUser)
                 .build();
 
-        Account savedAccount = accountReponsitory.save(account);
+        Account savedAccount = accountRepository.save(account);
         return AuthResponseDTO.from(savedAccount);
     }
 
-    public AuthResponseDTO login(LoginRequestDTO request, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+    public AuthResponseDTO login(LoginRequestDTO request, HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse) {
         Authentication authentication;
         try {
             authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getUsername().trim(), request.getPassword())
-            );
+                    new UsernamePasswordAuthenticationToken(request.getUsername().trim(), request.getPassword()));
         } catch (Exception e) {
             throw new AppException(ErrorCode.INVALID_CREDENTIALS, "Đăng nhập thất bại");
         }
@@ -76,11 +75,10 @@ public class AuthService {
         Object principal = authentication.getPrincipal();
         if (principal instanceof CustomUserDetails customUserDetails) {
             return new AuthResponseDTO(
-                    customUserDetails.name()
-            );
+                    customUserDetails.name());
         }
 
-        return accountReponsitory.findAccountByUsername(request.getUsername().trim())
+        return accountRepository.findAccountByUsername(request.getUsername().trim())
                 .map(AuthResponseDTO::from)
                 .orElseThrow(() -> new AppException(ErrorCode.INVALID_CREDENTIALS, "Đăng nhập thất bại"));
     }
