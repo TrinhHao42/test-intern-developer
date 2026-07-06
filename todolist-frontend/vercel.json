@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/auth/:path*",
-      "destination": "https://todo-backend-render.onrender.com/auth/:path*"
+      "destination": "https://test-intern-developer-mn4d.onrender.com/auth/:path*"
     },
     {
       "source": "/Todolist/:path*",
-      "destination": "https://todo-backend-render.onrender.com/Todolist/:path*"
+      "destination": "https://test-intern-developer-mn4d.onrender.com/Todolist/:path*"
     }
   ]
 }

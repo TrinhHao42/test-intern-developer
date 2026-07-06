@@ -2,9 +2,10 @@ spring:
   application:
     name: todolist-backend
   datasource:
-    url: jdbc:postgresql://localhost:5432/todolistDB
+
+    url: jdbc:postgresql://dpg-d95m5d9kh4rs738l1ung-a.singapore-postgres.render.com/todolistdb_ylm9
     username: user
-    password: sapassword
+    password: 6c1XPO59Rs3zk5rGdxkYL1WiTbX8IKKU
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
