@@ -35,10 +35,6 @@ export default function Sidebar() {
     }, 400);
   };
 
-  const completedCount = tasks.filter(t => t.completed).length;
-  const totalCount = tasks.length;
-  const progressPercent = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
-
   return (
     <div className="space-y-6">
       <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm space-y-5">
@@ -131,22 +127,6 @@ export default function Sidebar() {
               Xóa lọc ngày
             </button>
           )}
-        </div>
-      </div>
-
-      {/* Quick Stats Widget */}
-      <div className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-2xl p-5 shadow-md">
-        <h4 className="font-bold text-lg mb-2">Tiến độ công việc</h4>
-        <div className="text-3xl font-extrabold mb-1">
-          {completedCount} / {totalCount}
-        </div>
-        <p className="text-indigo-100 text-xs">Công việc đã được hoàn thành</p>
-        
-        <div className="w-full bg-white/20 h-1.5 rounded-full mt-4 overflow-hidden">
-          <div 
-            className="bg-white h-full rounded-full transition-all duration-500"
-            style={{ width: `${progressPercent}%` }}
-          ></div>
         </div>
       </div>
     </div>
