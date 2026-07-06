@@ -35,10 +35,39 @@ public class TaskService {
         throw new AppException(ErrorCode.UNAUTHENTICATED);
     }
 
+    @jakarta.persistence.PersistenceContext
+    private jakarta.persistence.EntityManager entityManager;
+
     @Transactional(readOnly = true)
     public List<TaskResponseDTO> getTasks(Boolean completed, java.time.LocalDate dueDate, String search) {
         UUID userId = getCurrentUserId();
-        return taskRepository.findTasks(userId, completed, dueDate, search).stream()
+        
+        StringBuilder jpql = new StringBuilder("SELECT t FROM Task t WHERE t.user.id = :userId AND t.deletedAt IS NULL");
+        
+        if (completed != null) {
+            jpql.append(" AND t.completed = :completed");
+        }
+        if (dueDate != null) {
+            jpql.append(" AND t.dueDate = :dueDate");
+        }
+        if (search != null && !search.trim().isEmpty()) {
+            jpql.append(" AND (LOWER(t.title) LIKE LOWER(:search) OR LOWER(t.description) LIKE LOWER(:search))");
+        }
+        
+        var query = entityManager.createQuery(jpql.toString(), Task.class);
+        query.setParameter("userId", userId);
+        
+        if (completed != null) {
+            query.setParameter("completed", completed);
+        }
+        if (dueDate != null) {
+            query.setParameter("dueDate", dueDate);
+        }
+        if (search != null && !search.trim().isEmpty()) {
+            query.setParameter("search", "%" + search.trim() + "%");
+        }
+        
+        return query.getResultList().stream()
                 .map(TaskResponseDTO::from)
                 .collect(Collectors.toList());
     }
