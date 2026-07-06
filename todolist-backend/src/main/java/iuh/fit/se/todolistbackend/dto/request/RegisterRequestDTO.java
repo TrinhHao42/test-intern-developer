@@ -15,6 +15,7 @@ import lombok.experimental.FieldDefaults;
 public class RegisterRequestDTO {
 
     @NotBlank(message = "Tên đăng nhập không được để trống.")
+    @Size(min = 4, max = 50, message = "Tên đăng nhập phải từ 4 đến 50 ký tự.")
     String username;
 
     @NotBlank(message = "Mật khẩu không được để trống.")
@@ -29,5 +30,6 @@ public class RegisterRequestDTO {
     String password;
 
     @NotBlank(message = "Tên hiển thị không được để trống.")
+    @Size(min = 2, max = 100, message = "Tên hiển thị phải từ 2 đến 100 ký tự.")
     String name;
 }

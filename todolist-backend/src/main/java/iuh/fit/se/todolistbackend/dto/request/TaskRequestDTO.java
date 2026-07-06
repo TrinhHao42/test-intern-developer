@@ -8,6 +8,8 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.Size;
+
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @Setter
@@ -15,12 +17,14 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskRequestDTO {
-    @NotBlank(message = "Title must not be blank")
+    @NotBlank(message = "Tiêu đề công việc không được để trống.")
+    @Size(max = 255, message = "Tiêu đề không được vượt quá 255 ký tự.")
     String title;
 
+    @Size(max = 1000, message = "Mô tả không được vượt quá 1000 ký tự.")
     String description;
 
-    @NotNull(message = "Priority must not be null")
+    @NotNull(message = "Độ ưu tiên không được để trống.")
     Priority priority;
 
     LocalDate dueDate;

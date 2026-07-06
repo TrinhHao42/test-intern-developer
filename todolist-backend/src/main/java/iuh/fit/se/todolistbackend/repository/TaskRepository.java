@@ -18,9 +18,9 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
     Optional<Task> findByIdAndUserIdAndDeletedAtIsNull(UUID id, UUID userId);
 
     @Query("SELECT t FROM Task t WHERE t.user.id = :userId AND t.deletedAt IS NULL " +
-           "AND (:completed IS NULL OR t.completed = :completed) " +
-           "AND (:dueDate IS NULL OR t.dueDate = :dueDate) " +
-           "AND (:search IS NULL OR LOWER(t.title) LIKE LOWER(CONCAT('%', :search, '%')) OR LOWER(t.description) LIKE LOWER(CONCAT('%', :search, '%')))")
+           "AND (cast(:completed as boolean) IS NULL OR t.completed = :completed) " +
+           "AND (cast(:dueDate as date) IS NULL OR t.dueDate = :dueDate) " +
+           "AND (cast(:search as string) IS NULL OR LOWER(t.title) LIKE LOWER(CONCAT('%', cast(:search as string), '%')) OR LOWER(t.description) LIKE LOWER(CONCAT('%', cast(:search as string), '%')))")
     List<Task> findTasks(@Param("userId") UUID userId,
                          @Param("completed") Boolean completed,
                          @Param("dueDate") LocalDate dueDate,
