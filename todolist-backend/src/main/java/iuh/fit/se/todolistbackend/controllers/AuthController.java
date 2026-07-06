@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.web.bind.annotation.GetMapping;
+
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -32,6 +34,11 @@ public class AuthController {
                                                  HttpServletRequest httpServletRequest,
                                                  HttpServletResponse httpServletResponse) {
         return ResponseEntity.ok(authService.login(request, httpServletRequest, httpServletResponse));
+    }
+
+    @GetMapping("/ping")
+    public ResponseEntity<Void> ping() {
+        return ResponseEntity.ok().build();
     }
 }
 
