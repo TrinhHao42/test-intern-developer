@@ -8,6 +8,33 @@ export default function Sidebar() {
   const { items: tasks, filters } = useSelector(state => state.tasks);
   const { search, completedFilter, dueDateFilter } = filters;
 
+  const [localSearch, setLocalSearch] = React.useState(search);
+  const debounceTimeoutRef = React.useRef(null);
+
+  // Sync local search state with Redux search value (e.g. when cleared)
+  React.useEffect(() => {
+    setLocalSearch(search);
+  }, [search]);
+
+  // Cleanup timeout on unmount
+  React.useEffect(() => {
+    return () => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleSearchChange = (value) => {
+    setLocalSearch(value);
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+    debounceTimeoutRef.current = setTimeout(() => {
+      dispatch(setSearch(value));
+    }, 400);
+  };
+
   const completedCount = tasks.filter(t => t.completed).length;
   const totalCount = tasks.length;
   const progressPercent = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
@@ -28,8 +55,8 @@ export default function Sidebar() {
               type="text"
               placeholder="Tìm tên, mô tả..."
               className="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-              value={search}
-              onChange={e => dispatch(setSearch(e.target.value))}
+              value={localSearch}
+              onChange={e => handleSearchChange(e.target.value)}
             />
             <Search className="absolute left-3 top-2.5 text-slate-400" size={16} />
           </div>
